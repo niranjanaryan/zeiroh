@@ -28,7 +28,7 @@ See **[EVAL.md](EVAL.md)** (honest limits) and **[SCALING.md](SCALING.md)**
 
 ```elixir
 {:zeiroh, "~> 0.1"}
-{:ingot, "~> 0.1", optional: true}       # Iroh+Zenoh cluster
+{:ingot, "~> 0.1", hex: :ingot_cluster, optional: true}
 {:dusk, "~> 0.1", optional: true}        # Zenoh-first
 {:gale, "~> 0.1", optional: true}        # HTTP
 {:flame, "~> 0.5"}

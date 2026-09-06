@@ -14,4 +14,4 @@ Canonical git remote: `https://github.com/niranjanaryan/zeiroh`
    Topics: `elixir`, `phoenix`, `flame`, `iroh`, `zenoh`, `libcluster`
 
 Path Mix deps (`../ingot`, etc.) cannot ship on Hex. `HEX_PUBLISH=1` drops them;
-hosts add `{:ingot, "~> 0.1", optional: true}` themselves.
+hosts add `{:ingot, "~> 0.1", hex: :ingot_cluster, optional: true}` themselves.
