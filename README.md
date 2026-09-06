@@ -36,6 +36,18 @@ See **[EVAL.md](EVAL.md)** (honest limits) and **[SCALING.md](SCALING.md)**
 
 Host still picks **one** of `iroh_beam` or `zenohex`.
 
+## CLI
+
+```bash
+mix zeiroh.install          # ~/.local/bin/zeiroh
+
+zeiroh backends
+zeiroh flame --overlay both
+zeiroh version
+```
+
+Inside a Mix project: `mix zeiroh backends`.
+
 ## Launch
 
 ```elixir

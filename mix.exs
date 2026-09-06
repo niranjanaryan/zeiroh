@@ -11,6 +11,7 @@ defmodule Zeiroh.MixProject do
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      escript: [main_module: Zeiroh.CLI, name: "zeiroh"],
       docs: docs(),
       package: package(),
       description: description(),

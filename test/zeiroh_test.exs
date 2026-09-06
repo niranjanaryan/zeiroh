@@ -73,6 +73,13 @@ defmodule ZeirohTest do
     assert_receive :zenoh_ran, 1_000
   end
 
+  test "CLI help and flame" do
+    assert :ok = Zeiroh.CLI.main(["--help"], halt: false)
+    assert :ok = Zeiroh.CLI.main(["version"], halt: false)
+    assert :ok = Zeiroh.CLI.main(["backends"], halt: false)
+    assert :ok = Zeiroh.CLI.main(["flame", "--overlay", "both"], halt: false)
+  end
+
   test "FLAME both overlay" do
     {:ok, state} = Zeiroh.FLAME.Backend.init(overlay: :both, live: false)
     {:ok, _term, state} = Zeiroh.FLAME.Backend.remote_boot(state)
