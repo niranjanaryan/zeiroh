@@ -73,6 +73,10 @@ defmodule ZeirohTest do
     assert_receive :zenoh_ran, 1_000
   end
 
+  test "CLI install paths" do
+    assert is_binary(Zeiroh.CLI.Paths.bin_dir())
+  end
+
   test "CLI help and flame" do
     assert :ok = Zeiroh.CLI.main(["--help"], halt: false)
     assert :ok = Zeiroh.CLI.main(["version"], halt: false)

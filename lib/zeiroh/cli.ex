@@ -10,7 +10,10 @@ defmodule Zeiroh.CLI do
     zeiroh flame [--overlay iroh|zenoh|both]
     zeiroh version
 
-  Install: mix zeiroh.install   (escript → ~/.local/bin/zeiroh)
+  Install: mix zeiroh.install
+    Linux/macOS: ~/.local/bin
+    Windows:     %LOCALAPPDATA%\\elixcoder\\bin
+    Override:    ELIXCODER_BIN
   """
 
   def main(args), do: main(args, halt: !mix?())

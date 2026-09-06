@@ -39,7 +39,9 @@ Host still picks **one** of `iroh_beam` or `zenohex`.
 ## CLI
 
 ```bash
-mix zeiroh.install          # ~/.local/bin/zeiroh
+mix zeiroh.install
+# Linux/macOS: ~/.local/bin    Windows: %LOCALAPPDATA%\elixcoder\bin
+# needs escript (Erlang/OTP) on PATH
 
 zeiroh backends
 zeiroh flame --overlay both

@@ -1,21 +1,25 @@
 defmodule Mix.Tasks.Zeiroh.Install do
-  @moduledoc "Build escript and install `zeiroh` to ~/.local/bin."
+  @moduledoc "Build escript and install `zeiroh` for Linux, macOS, and Windows."
   use Mix.Task
-  @shortdoc "Install the zeiroh CLI"
+  @shortdoc "Install the zeiroh CLI (all OS)"
 
   @impl Mix.Task
   def run(_args) do
     Mix.Task.run("compile")
     Mix.Task.run("escript.build")
 
-    bin_dir = Path.expand("~/.local/bin")
-    File.mkdir_p!(bin_dir)
+    dest = Zeiroh.CLI.Paths.install_escript("zeiroh")
+    Mix.shell().info("installed #{dest}")
+    Mix.shell().info(path_hint())
+  end
 
-    escript = Path.join(File.cwd!(), "zeiroh")
-    File.cp!(escript, Path.join(bin_dir, "zeiroh"))
-    File.chmod!(Path.join(bin_dir, "zeiroh"), 0o755)
+  defp path_hint do
+    dir = Zeiroh.CLI.Paths.bin_dir()
 
-    Mix.shell().info("installed #{Path.join(bin_dir, "zeiroh")}")
-    Mix.shell().info("ensure #{bin_dir} is on PATH")
+    if Zeiroh.CLI.Paths.windows?() do
+      "add #{dir} to PATH (Windows: System Properties → Environment Variables)"
+    else
+      "ensure #{dir} is on PATH"
+    end
   end
 end
