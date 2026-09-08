@@ -15,6 +15,12 @@ Today, Stacks node operators and sBTC relay operators rely on centralized APIs, 
 
 **Why Stacks:** As PoX-5, sBTC, and the Nakamoto upgrade scale, Stacks operators need resilient, low-latency node networking that doesn't depend on a single relay or static config. Zeiroh gives them a self-healing P2P data plane written in Elixir, composable with any Stacks backend.
 
+**Why Now:** Q3 2026 is the right moment because:
+1. **PoX-5 is live** — Stackers are running signer nodes across multiple regions and need resilient peer discovery.
+2. **sBTC is in market** — relay operators are scaling infrastructure and need fault-tolerant coordination without centralized brokers.
+3. **Nakamoto upgrade is active** — node operators are upgrading and need better networking primitives.
+4. **No existing solution** — the gap is clear and time-sensitive.
+
 ---
 
 ## 2. Problem Statement
@@ -27,6 +33,12 @@ Stacks infrastructure networking is centralized and fragile:
 - **Off-chain services**: Stacks dApps that need distributed workers (indexers, relay monitors, fraud detectors) have no standard FLAME-compatible overlay.
 
 **The gap:** No Elixir-native P2P overlay designed for Stacks node and relay communication. Existing options are generic libp2p wrappers or single-language tools that don't integrate with Phoenix/FLAME.
+
+**Who is affected:**
+- PoX-5 Stackers running signer nodes that need resilient peer discovery
+- sBTC relay operators coordinating across multiple regions
+- dApp developers building distributed indexers and monitors
+- DevOps teams managing Stacks infrastructure at scale
 
 ---
 
