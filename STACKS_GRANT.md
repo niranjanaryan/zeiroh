@@ -16,15 +16,15 @@ Today, Stacks node operators and sBTC relay operators rely on centralized APIs, 
 **Why Stacks:** As PoX-5, sBTC, and the Nakamoto upgrade scale, Stacks operators need resilient, low-latency node networking that doesn't depend on a single relay or static config. Zeiroh gives them a self-healing P2P data plane written in Elixir, composable with any Stacks backend.
 
 **Why Now:** Q3 2026 is the right moment because:
-1. **PoX-5 is live** — Stackers are running signer nodes across multiple regions and need resilient peer discovery.
+1. **PoX-5 is live** — Stackers are running signer nodes across multiple regions and need resilient peer discovery without static configs.
 2. **sBTC is in market** — relay operators are scaling infrastructure and need fault-tolerant coordination without centralized brokers.
 3. **Nakamoto upgrade is active** — node operators are upgrading and need better networking primitives.
-4. **No existing solution** — the gap is clear and time-sensitive.
+4. **No existing solution** — Zeiroh is the only Elixir package combining Phoenix FLAME + Iroh/Zenoh P2P; the gap is clear and time-sensitive.
 
 **Cloud fit:** Zeiroh is designed for cloud-native Stacks deployments:
-- **Hetzner / DigitalOcean** — low-cost nodes for Stackers and relay operators; Iroh hole-punching works behind NAT.
-- **AWS / GCP / Azure** — enterprise Stacks infrastructure with cross-region FLAME workers.
-- **Fly.io / Kubernetes** — edge deployment for low-latency P2P discovery near Stacks nodes.
+- **Hetzner / DigitalOcean** — low-cost Stacker/relay nodes; Iroh hole-punching works behind NAT; FLAME workers auto-discover without manual config.
+- **AWS / GCP / Azure** — enterprise Stacks infrastructure with cross-region FLAME workers; Zenoh pub/sub coordinates relay state.
+- **Fly.io / Kubernetes** — edge deployment for low-latency P2P discovery near Stacks nodes; Burrito single-binary CLI simplifies deployment.
 - **Local / Bare metal** — Stacks node operators running on-prem can use Zenoh brokered mode without cloud dependencies.
 
 ---
