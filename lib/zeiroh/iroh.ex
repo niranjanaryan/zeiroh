@@ -1,6 +1,6 @@
 defmodule Zeiroh.Iroh do
   @moduledoc """
-  Iroh overlay process. Uses `Ingot.Iroh` when loaded; otherwise a stub.
+  Iroh overlay process. Uses `IngotCluster.Iroh` when loaded; otherwise a stub.
   """
   use GenServer
   require Logger
@@ -19,15 +19,15 @@ defmodule Zeiroh.Iroh do
     alpns = Keyword.get(opts, :alpns, ["zeiroh/flame"])
 
     cond do
-      Code.ensure_loaded?(Ingot.Iroh) and function_exported?(Ingot.Iroh, :start_link, 1) ->
-        case maybe_ingot(opts) do
-          {:ok, pid} -> {:ok, %{backend: :ingot, endpoint: pid}}
-          {:error, {:already_started, pid}} -> {:ok, %{backend: :ingot, endpoint: pid}}
+      Code.ensure_loaded?(IngotCluster.Iroh) and function_exported?(IngotCluster.Iroh, :start_link, 1) ->
+        case maybe_ingot_cluster(opts) do
+          {:ok, pid} -> {:ok, %{backend: :ingot_cluster, endpoint: pid}}
+          {:error, {:already_started, pid}} -> {:ok, %{backend: :ingot_cluster, endpoint: pid}}
           {:error, reason} -> {:stop, reason}
         end
 
       true ->
-        Logger.warning("Zeiroh.Iroh stub (iroh_beam / ingot not loaded) alpns=#{inspect(alpns)}")
+        Logger.warning("Zeiroh.Iroh stub (iroh_beam / ingot_cluster not loaded) alpns=#{inspect(alpns)}")
         {:ok, %{backend: :stub, endpoint: nil, stub: true, alpns: alpns}}
     end
   end
@@ -36,10 +36,10 @@ defmodule Zeiroh.Iroh do
   def handle_call(:endpoint, _from, %{stub: true} = state),
     do: {:reply, {:error, :backend_not_loaded}, state}
 
-  def handle_call(:endpoint, _from, %{backend: :ingot} = state) do
+  def handle_call(:endpoint, _from, %{backend: :ingot_cluster} = state) do
     reply =
-      if function_exported?(Ingot.Iroh, :endpoint, 0) do
-        Ingot.Iroh.endpoint()
+      if function_exported?(IngotCluster.Iroh, :endpoint, 0) do
+        IngotCluster.Iroh.endpoint()
       else
         {:ok, state.endpoint}
       end
@@ -50,11 +50,11 @@ defmodule Zeiroh.Iroh do
   def handle_call(:endpoint, _from, state),
     do: {:reply, {:ok, state.endpoint}, state}
 
-  defp maybe_ingot(opts) do
-    if Process.whereis(Ingot.Iroh) do
-      {:ok, Process.whereis(Ingot.Iroh)}
+  defp maybe_ingot_cluster(opts) do
+    if Process.whereis(IngotCluster.Iroh) do
+      {:ok, Process.whereis(IngotCluster.Iroh)}
     else
-      Ingot.Iroh.start_link(Keyword.take(opts, [:alpns, :identity, :network, :name]))
+      IngotCluster.Iroh.start_link(Keyword.take(opts, [:alpns, :identity, :network, :name]))
     end
   end
 end

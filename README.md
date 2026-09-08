@@ -10,15 +10,15 @@ Phoenix **FLAME** overlay for **Iroh** (iron) and **Zenoh**. First-class
 package in this line, not a throwaway.
 
 ```
-gale     — HTTP/3 (server + client)
-ingot    — Iroh + Zenoh cluster / libcluster
-dusk     — Zenoh-first cluster
-orian    — BLAKE3 / S3 / S5 storage
-zeiroh   — FLAME Iroh/Zenoh backends; launch ingot or dusk
-crucible — boot the machine (local, docker, wrap Fly/K8s/EC2)
+gale        — HTTP/3 (server + client)
+ingot_cluster — Iroh + Zenoh cluster / libcluster
+dusk        — Zenoh-first cluster
+orian       — BLAKE3 / S3 / S5 storage
+zeiroh      — FLAME Iroh/Zenoh backends; launch ingot_cluster or dusk
+crucible    — boot the machine (local, docker, wrap Fly/K8s/EC2)
 ```
 
-Zeiroh **runs** work (`FLAME.call`). Crucible **creates** the box. Ingot
+Zeiroh **runs** work (`FLAME.call`). Crucible **creates** the box. IngotCluster
 or Dusk **join** nodes. Gale **talks** HTTP.
 
 See **[EVAL.md](EVAL.md)** (honest limits) and **[SCALING.md](SCALING.md)**
@@ -28,7 +28,7 @@ See **[EVAL.md](EVAL.md)** (honest limits) and **[SCALING.md](SCALING.md)**
 
 ```elixir
 {:zeiroh, "~> 0.1"}
-{:ingot, "~> 0.1", hex: :ingot_cluster, optional: true}
+{:ingot_cluster, "~> 0.1", hex: :ingot_cluster, optional: true}
 {:dusk, "~> 0.1", optional: true}        # Zenoh-first
 {:gale, "~> 0.1", optional: true}        # HTTP
 {:flame, "~> 0.5"}
@@ -40,8 +40,9 @@ Host still picks **one** of `iroh_beam` or `zenohex`.
 
 ```bash
 mix zeiroh.install
+# prefers a Burrito single binary (ERTS inside); else Mix escript
+# mix zeiroh.binary   # burrito_out/zeiroh_<os>
 # Linux/macOS: ~/.local/bin    Windows: %LOCALAPPDATA%\elixcoder\bin
-# needs escript (Erlang/OTP) on PATH
 
 zeiroh backends
 zeiroh flame --overlay both
@@ -54,7 +55,7 @@ Inside a Mix project: `mix zeiroh backends`.
 
 ```elixir
 {Zeiroh, overlay: :both, live: false}
-{Zeiroh, package: :ingot, iroh: true, zenoh: [live: false]}
+{Zeiroh, package: :ingot_cluster, iroh: true, zenoh: [live: false]}
 {Zeiroh, package: :dusk, live: false}
 ```
 

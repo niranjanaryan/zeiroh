@@ -4,7 +4,7 @@ defmodule Zeiroh do
 
   First-class FLAME package. Siblings:
 
-  * [Ingot](https://github.com/niranjanaryan/ingot) — Iroh + Zenoh cluster
+  * [IngotCluster](https://github.com/niranjanaryan/ingot_cluster) — Iroh + Zenoh cluster
   * [Dusk](https://github.com/niranjanaryan/dusk) — Zenoh-first cluster
   * [Crucible](https://github.com/niranjanaryan/crucible) — boot the machine
   * [Gale](https://github.com/niranjanaryan/gale) — HTTP/3
@@ -12,7 +12,7 @@ defmodule Zeiroh do
       config :flame, :backend, {Zeiroh.FLAME.Backend, provisioner: :local, overlay: :both}
 
       {Zeiroh, overlay: :both, live: false}
-      {Zeiroh, package: :ingot, iroh: true, zenoh: [live: false]}
+      {Zeiroh, package: :ingot_cluster, iroh: true, zenoh: [live: false]}
       {Zeiroh, package: :dusk, live: false}
   """
 
@@ -21,11 +21,11 @@ defmodule Zeiroh do
 
   def backends do
     %{
-      iroh: Code.ensure_loaded?(Ingot.Iroh) and Ingot.Iroh.available?(),
+      iroh: Code.ensure_loaded?(IngotCluster.Iroh) and IngotCluster.Iroh.available?(),
       zenoh:
-        (Code.ensure_loaded?(Ingot.Zenoh) and Ingot.Zenoh.available?()) or
+        (Code.ensure_loaded?(IngotCluster.Zenoh) and IngotCluster.Zenoh.available?()) or
           (Code.ensure_loaded?(Dusk.Zenoh) and Dusk.Zenoh.available?()),
-      ingot: Code.ensure_loaded?(Ingot),
+      ingot_cluster: Code.ensure_loaded?(IngotCluster),
       dusk: Code.ensure_loaded?(Dusk),
       flame_iroh: true,
       flame_zenoh: true,

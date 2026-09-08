@@ -7,5 +7,5 @@ Report vulnerabilities privately: GitHub Security Advisories on
 Do not file public issues for overlay auth, FLAME remote spawn, or
 provisioner credentials.
 
-This package does not ship a native NIF. Overlay crypto is in Ingot/Dusk
+This package does not ship a native NIF. Overlay crypto is in IngotCluster/Dusk
 (`iroh_beam` / `zenohex`) when those are loaded.

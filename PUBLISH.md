@@ -13,5 +13,5 @@ Canonical git remote: `https://github.com/niranjanaryan/zeiroh`
 7. GitHub About: “Phoenix FLAME overlay for Iroh and Zenoh”
    Topics: `elixir`, `phoenix`, `flame`, `iroh`, `zenoh`, `libcluster`
 
-Path Mix deps (`../ingot`, etc.) cannot ship on Hex. `HEX_PUBLISH=1` drops them;
-hosts add `{:ingot, "~> 0.1", hex: :ingot_cluster, optional: true}` themselves.
+Path Mix deps (`../ingot_cluster`, etc.) cannot ship on Hex. `HEX_PUBLISH=1` drops them;
+hosts add `{:ingot_cluster, "~> 0.1", hex: :ingot_cluster, optional: true}` themselves.

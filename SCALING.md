@@ -14,7 +14,7 @@ libraries; they are **transports**. Smooth scaling means splitting the job:
 FLAME.Pool
     │ remote_boot
     ▼
-Ingot.Provisioner  ──HTTP/API──►  Fly | K8s | Docker | (later EC2)
+IngotCluster.Provisioner  ──HTTP/API──►  Fly | K8s | Docker | (later EC2)
     │ image + FLAME_PARENT + overlay env
     ▼
 Runner boots release
@@ -62,7 +62,7 @@ FLAME backend. Overlay code should **wrap** these, not replace them.
 ```elixir
 {FLAME.Pool,
  name: MyApp.Runners,
- backend: {Ingot.FLAME.Backend,
+ backend: {IngotCluster.FLAME.Backend,
    provisioner: :fly,          # :local | :docker | :fly | :k8s
    overlay: :iroh,             # :iroh | :zenoh | :both
    live: true}}
@@ -130,7 +130,7 @@ These stay up while FLAME min=0:
 - K8s: Deployment + Service `zenohd:7447`.
 - Docker Compose: `eclipse/zenoh` next to the app.
 - Optional REST plugin for admin; storage plugin only if you need
-  last-value of `ingot/cluster/nodes`.
+  last-value of `ingot_cluster/cluster/nodes`.
 
 **Iroh**
 
@@ -138,7 +138,7 @@ These stay up while FLAME min=0:
 - Prod: n0 Shared/Dedicated relays **or** `iroh-relay` on a public IP
   (Fly machine / VM) with TLS.
 - Bootstrap: parent ticket in env or a one-shot Zenoh key
-  `ingot/iroh/bootstrap` (Zenoh as introduction, Iroh as dist).
+  `ingot_cluster/iroh/bootstrap` (Zenoh as introduction, Iroh as dist).
 - `IrohBeam.Distribution` is OTP 29-only today — document the OTP
   floor; until then use classic dist *plus* Iroh only for discovery.
 
@@ -169,14 +169,14 @@ only has to stay connected.
 Survey of Hex FLAME backends + Libcloud: [../crucible/DESIGN.md](../crucible/DESIGN.md).
 Skeleton Mix app: `crucible/` (`Crucible.Driver`, Local/Docker, wrap Fly/K8s/EC2).
 
-## Implementation order (zeiroh FLAME + crucible boot + ingot/dusk join)
+## Implementation order (zeiroh FLAME + crucible boot + ingot_cluster/dusk join)
 
-1. `Ingot.Provisioner` behaviour: `boot/1`, `shutdown/1`.
+1. `IngotCluster.Provisioner` behaviour: `boot/1`, `shutdown/1`.
 2. `Local` + `Docker` adapters; tests with `live: false`.
 3. Real `@behaviour FLAME.Backend` wrapping Local, then Docker.
 4. Wrap `FLAME.FlyBackend` / `FLAMEK8sBackend` as provisioners;
    inject overlay env.
-5. Live `Ingot.Strategy.Zenoh`: put/get `node@host` on zenohd.
+5. Live `IngotCluster.Strategy.Zenoh`: put/get `node@host` on zenohd.
 6. Live Iroh: ticket exchange + `Node.connect` (dist when OTP allows).
 7. Docs: compose file for zenohd; Fly `[env]` for tickets; K8s
    Service for zenohd.

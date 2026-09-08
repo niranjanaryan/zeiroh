@@ -1,6 +1,6 @@
 defmodule Zeiroh.Zenoh do
   @moduledoc """
-  Zenoh overlay process. Uses `Ingot.Zenoh` or `Dusk.Zenoh` when loaded.
+  Zenoh overlay process. Uses `IngotCluster.Zenoh` or `Dusk.Zenoh` when loaded.
   """
   use GenServer
   require Logger
@@ -34,9 +34,9 @@ defmodule Zeiroh.Zenoh do
   def handle_call({:put, key, payload}, _from, state) do
     result =
       cond do
-        state.backend == :ingot and function_exported?(Ingot.Zenoh, :put, 2) and
-            Process.whereis(Ingot.Zenoh) ->
-          Ingot.Zenoh.put(key, payload)
+         state.backend == :ingot_cluster and function_exported?(IngotCluster.Zenoh, :put, 2) and
+            Process.whereis(IngotCluster.Zenoh) ->
+          IngotCluster.Zenoh.put(key, payload)
 
         state.backend == :dusk and function_exported?(Dusk.Zenoh, :put, 2) and
             Process.whereis(Dusk.Zenoh) ->
@@ -51,7 +51,7 @@ defmodule Zeiroh.Zenoh do
 
   defp pick_backend do
     cond do
-      Code.ensure_loaded?(Ingot.Zenoh) -> :ingot
+      Code.ensure_loaded?(IngotCluster.Zenoh) -> :ingot_cluster
       Code.ensure_loaded?(Dusk.Zenoh) -> :dusk
       true -> :stub
     end

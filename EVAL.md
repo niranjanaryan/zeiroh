@@ -1,4 +1,4 @@
-# Evaluation — Zeiroh, Ingot, Dusk, FLAME
+# Evaluation — Zeiroh, IngotCluster, Dusk, FLAME
 
 Status as of 2026-09-06. This is the design eval, not a ship checklist.
 
@@ -14,12 +14,12 @@ Kind (Kubernetes-in-Docker) clustering is **out of scope**.
 | Package | Role | Keep? |
 |---|---|---|
 | **gale** | Phoenix HTTP/3 (Zig NIF, Bandit sidecar) | yes |
-| **ingot** | Iroh + Zenoh cluster, libcluster strategies, one FLAME module | yes |
+| **ingot_cluster** | Iroh + Zenoh cluster, libcluster strategies, one FLAME module | yes |
 | **dusk** | Zenoh-first cluster (optional Iroh) | yes |
 | **crucible** | Multi-cloud boot (`Driver`, Gale HTTP) | yes |
-| **zeiroh** | FLAME Iroh/Zenoh backends; launch `package: :ingot \| :dusk \| :zeiroh` | **yes** |
+| **zeiroh** | FLAME Iroh/Zenoh backends; launch `package: :ingot_cluster \| :dusk \| :zeiroh` | **yes** |
 
-`zeiroh` path-depends on sibling `ingot` and `dusk`. Mix still compiles those
+`zeiroh` path-depends on sibling `ingot_cluster` and `dusk`. Mix still compiles those
 path deps even when marked `optional: true`. It does **not** fix the
 `iroh_beam` vs `zenohex` rustler_precompiled pin clash: a host app still
 picks **one** native backend.
@@ -75,7 +75,7 @@ Without Fly, Kubernetes, or local Docker boot, the honest product is
 
 ## libcluster today
 
-`Ingot.Strategy.Iroh` / `Ingot.Strategy.Zenoh` (and dusk counterparts):
+`IngotCluster.Strategy.Iroh` / `IngotCluster.Strategy.Zenoh` (and dusk counterparts):
 
 - `GenServer` tick + `Cluster.Strategy.connect_nodes/4`.
 - Peer list is **`config[:nodes]`**, static.
@@ -93,10 +93,10 @@ Useful as a strategy *shape*. Not a mesh yet.
    there is no remote. `FLAME.call/3` works in-process.
 3. **FLAME boot mode** — wrap Fly / K8s / Docker; Iroh/Zenoh only for
    membership after boot.
-4. **One backend module** — `Ingot.FLAME.Backend` with
+4. **One backend module** — `IngotCluster.FLAME.Backend` with
    `overlay: :iroh | :zenoh | :both`. **Zeiroh** is the FLAME-facing
    package (`Zeiroh.FLAME.Iroh` / `.Zenoh` / `.Backend`) and delegates
-   cluster to ingot/dusk. Crucible is `provisioner:` under that backend.
+    cluster to ingot_cluster/dusk. Crucible is `provisioner:` under that backend.
 
 ## Launch (current, local overlay)
 
@@ -105,7 +105,7 @@ Useful as a strategy *shape*. Not a mesh yet.
 {:flame, "~> 0.5"}
 
 {Zeiroh, overlay: :both, live: false}
-{Zeiroh, package: :ingot, iroh: true, zenoh: [live: false]}
+{Zeiroh, package: :ingot_cluster, iroh: true, zenoh: [live: false]}
 {Zeiroh, package: :dusk, live: false}
 
 config :flame, :backend, {Zeiroh.FLAME.Backend, overlay: :both, live: false}

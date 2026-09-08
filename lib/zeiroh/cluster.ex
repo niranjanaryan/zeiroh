@@ -5,7 +5,7 @@ defmodule Zeiroh.Cluster do
   `:package` selects the cluster implementation:
 
   * `:zeiroh` (default) — local overlay processes
-  * `:ingot` — `Ingot.Cluster` when the sibling dep is present
+  * `:ingot_cluster` — `IngotCluster.Cluster` when the sibling dep is present
   * `:dusk` — `Dusk.Cluster` when the sibling dep is present
   """
   use Supervisor
@@ -26,7 +26,7 @@ defmodule Zeiroh.Cluster do
   def init(opts) do
     children =
       case Keyword.get(opts, :package, :zeiroh) do
-        :ingot -> ingot_children(opts)
+        :ingot_cluster -> ingot_cluster_children(opts)
         :dusk -> dusk_children(opts)
         _ -> zeiroh_children(opts)
       end
@@ -34,9 +34,9 @@ defmodule Zeiroh.Cluster do
     Supervisor.init(children, strategy: :one_for_one)
   end
 
-  defp ingot_children(opts) do
-    if Code.ensure_loaded?(Ingot.Cluster) do
-      [{Ingot.Cluster, Keyword.drop(opts, [:package, :name])}]
+  defp ingot_cluster_children(opts) do
+    if Code.ensure_loaded?(IngotCluster.Cluster) do
+      [{IngotCluster.Cluster, Keyword.drop(opts, [:package, :name])}]
     else
       zeiroh_children(opts)
     end

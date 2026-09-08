@@ -10,15 +10,15 @@ mix test
 mix docs
 ```
 
-Optional siblings (path deps when checked out next to this repo): `ingot`, `dusk`, `gale`, `crucible`.
+Optional siblings (path deps when checked out next to this repo): `ingot_cluster`, `dusk`, `gale`, `crucible`.
 
 ## Scope
 
 * `Zeiroh.FLAME.Iroh` / `Zenoh` / `Backend` — Phoenix FLAME backends
-* Cluster launch that can stand alone or delegate to Ingot / Dusk
+* Cluster launch that can stand alone or delegate to IngotCluster / Dusk
 * Docs: EVAL.md, SCALING.md
 
-Native Iroh/Zenoh NIFs live in Ingot and Dusk. Machine boot lives in Crucible.
+Native Iroh/Zenoh NIFs live in IngotCluster and Dusk. Machine boot lives in Crucible.
 
 ## Hex
 

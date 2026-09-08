@@ -12,6 +12,7 @@ defmodule Zeiroh.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       escript: [main_module: Zeiroh.CLI, name: "zeiroh"],
+      releases: releases(),
       docs: docs(),
       package: package(),
       description: description(),
@@ -33,8 +34,32 @@ defmodule Zeiroh.MixProject do
       {:telemetry, "~> 1.0"},
       {:libcluster, "~> 3.5", optional: true},
       {:flame, "~> 0.5", optional: true},
-      {:ex_doc, "~> 0.38", only: :dev, runtime: false}
-    ] ++ sibling(:ingot) ++ sibling(:dusk) ++ sibling(:gale) ++ sibling(:crucible)
+      {:ex_doc, "~> 0.38", only: :dev, runtime: false},
+      {:burrito, "~> 1.6", optional: true, runtime: false}
+    ] ++ sibling(:ingot_cluster) ++ sibling(:dusk) ++ sibling(:gale) ++ sibling(:crucible)
+  end
+
+  def wrap(%Mix.Release{} = release) do
+    if Code.ensure_loaded?(Burrito), do: Burrito.wrap(release), else: release
+  end
+
+  defp releases do
+    [
+      zeiroh: [
+        steps: [:assemble, &__MODULE__.wrap/1],
+        burrito: [targets: burrito_targets()]
+      ]
+    ]
+  end
+
+  defp burrito_targets do
+    [
+      macos: [os: :darwin, cpu: :x86_64, skip_nifs: true],
+      macos_silicon: [os: :darwin, cpu: :aarch64, skip_nifs: true],
+      linux: [os: :linux, cpu: :x86_64, skip_nifs: true],
+      linux_aarch64: [os: :linux, cpu: :aarch64, skip_nifs: true],
+      windows: [os: :windows, cpu: :x86_64, skip_nifs: true]
+    ]
   end
 
   # Path deps for local checkout; omitted from Hex tarball (path deps cannot ship).
@@ -49,7 +74,7 @@ defmodule Zeiroh.MixProject do
   end
 
   defp description do
-    "Phoenix FLAME overlay for Iroh and Zenoh. Launch Zeiroh, or cluster via Ingot / Dusk. Crucible boots machines."
+    "Phoenix FLAME overlay for Iroh and Zenoh. Launch Zeiroh, or cluster via IngotCluster / Dusk. Crucible boots machines."
   end
 
   defp docs do
@@ -80,7 +105,7 @@ defmodule Zeiroh.MixProject do
         "Changelog" => "#{@source_url}/blob/main/CHANGELOG.md",
         "Sponsor" => "https://github.com/sponsors/niranjanaryan",
         "HexDocs" => "https://hexdocs.pm/zeiroh",
-        "Ingot" => "https://github.com/niranjanaryan/ingot",
+        "IngotCluster" => "https://github.com/niranjanaryan/ingot_cluster",
         "Dusk" => "https://github.com/niranjanaryan/dusk",
         "Gale" => "https://github.com/niranjanaryan/gale",
         "Orian" => "https://github.com/niranjanaryan/orian"

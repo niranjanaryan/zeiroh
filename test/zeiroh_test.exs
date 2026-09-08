@@ -3,7 +3,7 @@ defmodule ZeirohTest do
 
   setup do
     on_exit(fn ->
-      for name <- [Zeiroh.Iroh, Zeiroh.Zenoh, Ingot.Iroh, Ingot.Zenoh] do
+      for name <- [Zeiroh.Iroh, Zeiroh.Zenoh, IngotCluster.Iroh, IngotCluster.Zenoh] do
         if pid = Process.whereis(name) do
           try do
             GenServer.stop(pid, :normal, 500)
@@ -23,7 +23,7 @@ defmodule ZeirohTest do
     assert b.flame_zenoh
     assert is_boolean(b.crucible)
     assert is_boolean(b.gale)
-    assert is_boolean(b.ingot)
+    assert is_boolean(b.ingot_cluster)
     assert is_boolean(b.dusk)
   end
 
