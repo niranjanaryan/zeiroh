@@ -21,6 +21,12 @@ Today, Stacks node operators and sBTC relay operators rely on centralized APIs, 
 3. **Nakamoto upgrade is active** — node operators are upgrading and need better networking primitives.
 4. **No existing solution** — the gap is clear and time-sensitive.
 
+**Cloud fit:** Zeiroh is designed for cloud-native Stacks deployments:
+- **Hetzner / DigitalOcean** — low-cost nodes for Stackers and relay operators; Iroh hole-punching works behind NAT.
+- **AWS / GCP / Azure** — enterprise Stacks infrastructure with cross-region FLAME workers.
+- **Fly.io / Kubernetes** — edge deployment for low-latency P2P discovery near Stacks nodes.
+- **Local / Bare metal** — Stacks node operators running on-prem can use Zenoh brokered mode without cloud dependencies.
+
 ---
 
 ## 2. Problem Statement
@@ -103,31 +109,23 @@ zeiroh flame --overlay stacks # spawn FLAME workers with Stacks overlay
 
 ## 5. Milestones
 
-### Milestone 1: Stacks Node Discovery via Iroh DHT (Weeks 1–3, $2,000 STX)
+### Milestone 1: Stacks Node Discovery + FLAME Overlay (Weeks 1–5, $3,000 STX)
 
-**Deliverable:** Working `Zeiroh.Stacks` node discovery backend.
+**Deliverable:** Working `Zeiroh.Stacks` node discovery and FLAME backend.
 
 - Iroh DHT namespace for Stacks nodes (`stacks/node/1` ALPN).
 - `zeiroh stacks peers` CLI: discover, list, and ping Stacks nodes.
 - Node identity: each node gets a stable Iroh peer ID derived from its Stacks `stx.address`.
-- Integration with `stacks-node` config: auto-generate `p2p.bootnodes` from DHT peers.
-- Tests: mock Iroh DHT, contract tests for discovery protocol.
-
-**Verification:** Published v0.2.0 with docs and a demo showing two Stacks nodes discovering each other via Iroh without manual config.
-
-### Milestone 2: FLAME Overlay for Stacks Off-Chain Services (Weeks 4–7, $2,000 STX)
-
-**Deliverable:** FLAME backend for distributed Stacks indexers and relay monitors.
-
 - `Zeiroh.FLAME.Backend` with Stacks-specific overlay config.
 - Auto-discovery of FLAME workers via Iroh/Zenoh.
 - Example: distributed Stacks block indexer that shards by burnchain block range.
 - Example: sBTC relay health monitor that aggregates status from multiple relays.
 - Integration with Crucible for provisioning workers across clouds.
+- Tests: mock Iroh DHT, contract tests for discovery and FLAME protocols.
 
-**Verification:** Published v0.3.0 with a tutorial: "Running a Distributed Stacks Indexer with Zeiroh + Crucible".
+**Verification:** Published v0.2.0 with docs and a tutorial: "Running a Distributed Stacks Indexer with Zeiroh + Crucible".
 
-### Milestone 3: sBTC Relay Pub/Sub + Production Packaging (Weeks 8–10, $2,000 STX)
+### Milestone 2: sBTC Relay Pub/Sub + Production Packaging (Weeks 6–10, $3,000 STX)
 
 **Deliverable:** Zenoh-based relay coordination and Burrito binary packaging.
 
@@ -137,7 +135,7 @@ zeiroh flame --overlay stacks # spawn FLAME workers with Stacks overlay
 - Performance benchmarks: discovery latency, message throughput, failover time.
 - Security review of peer identity and message authentication.
 
-**Verification:** Published v0.4.0, demo at Stacks community event, and open issues for relay operator feedback.
+**Verification:** Published v0.3.0, demo at Stacks community event, and open issues for relay operator feedback.
 
 ---
 
@@ -145,14 +143,14 @@ zeiroh flame --overlay stacks # spawn FLAME workers with Stacks overlay
 
 | Item | Amount (STX) | Notes |
 |------|-------------|-------|
-| Development (3 milestones) | 5,000 | 10 weeks at ~500 STX/week |
+| Development (2 milestones) | 5,000 | 10 weeks at ~500 STX/week |
 | Cloud infrastructure for testing | 500 | Hetzner/DO nodes for live P2P tests |
 | Security review | 250 | Peer identity, message auth |
 | Documentation & demo production | 150 | Tutorials, screencasts |
 | Buffer | 100 | Contingency |
 | **Total** | **6,000** | Lower than Crucible due to existing Zeiroh codebase |
 
-**Disbursement:** 50% at Milestone 1 (Week 3), 50% at Milestone 3 (Week 10).
+**Disbursement:** 50% at Milestone 1 (Week 5), 50% at Milestone 2 (Week 10).
 
 ---
 
