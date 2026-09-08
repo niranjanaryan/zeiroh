@@ -26,34 +26,33 @@ Distribution & Integrations
 
 ### Problem Statement
 ```
-Stacks node and sBTC relay networking relies on static configs and centralized relays, creating single points of failure. Node operators manually configure peers in stacks-node.toml, and relay coordination depends on centralized message brokers. There is no Elixir-native P2P overlay designed for Stacks infrastructure.
+Stacks node and sBTC relay networking relies on static configs and centralized relays, creating single points of failure. Node operators manually configure peers in stacks-node.toml, and relay coordination depends on centralized message brokers. There is no Elixir-native, FLAME-compatible P2P overlay designed for Stacks infrastructure. Zeiroh fills this gap as the Phoenix FLAME execution layer for Stacks off-chain workers.
 ```
 
 ### Solution
 ```
-Zeiroh adds a Stacks-specific overlay backend that provides Iroh-based DHT node discovery, FLAME-compatible off-chain workers for distributed indexers and monitors, and Zenoh pub/sub for sBTC relay coordination. All from Elixir, composable with existing Stacks tooling.
+Zeiroh adds a Stacks-specific overlay backend that provides Iroh-based DHT node discovery, FLAME-compatible off-chain workers for distributed indexers/monitors, and Zenoh pub/sub for sBTC relay coordination. All from Elixir, composable with existing Stacks tooling. Zeiroh is unique because it combines Phoenix FLAME worker spawning with Iroh/Zenoh P2P — IngotCluster handles cluster membership; Dusk handles Zenoh-first clustering. Only Zeiroh is the execution layer.
 ```
 
 ### What You Will Ship
 ```
-Milestone 1 (Week 3): Iroh DHT-based Stacks node discovery with stable peer IDs
-Milestone 2 (Week 7): FLAME backend for distributed Stacks indexers and relay monitors
-Milestone 3 (Week 10): Zenoh pub/sub for sBTC relay state synchronization
+Milestone 1 (Week 5): Iroh DHT-based Stacks node discovery + FLAME overlay for distributed indexers/monitors
+Milestone 2 (Week 10): Zenoh pub/sub for sBTC relay coordination + Burrito binary
 ```
 
 ### How This Helps Stacks
 ```
-Makes Stacks node and relay networking resilient, distributed, and fault-tolerant without centralized infrastructure. Enables geo-redundant sBTC relay networks and distributed off-chain workers for indexers and monitors.
+Makes Stacks node and relay networking resilient, distributed, and fault-tolerant without centralized infrastructure. Zeiroh is the FLAME execution layer for Stacks off-chain workers: distributed burnchain indexers, sBTC relay health monitors, and signer node health watchers — all auto-discovering via Iroh/Zenoh.
 ```
 
 ### Budget
 ```
-$6,000 STX — development (5,000 STX), cloud infrastructure for testing (500 STX), security review (250 STX), documentation (150 STX), buffer (100 STX)
+$5,000 STX — development (4,000 STX), cloud infrastructure for testing (400 STX), security review (250 STX), documentation and demos (200 STX), buffer (150 STX)
 ```
 
 ### Team
 ```
-Solo builder with 6+ open-source Elixir projects, including Zeiroh (FLAME overlay for Iroh/Zenoh), IngotCluster (Iroh+Zenoh cluster), Crucible (multi-cloud provisioner), Gale (HTTP/3), and Orian (S3/S5 transfer). All MIT-licensed with CI and docs.
+Solo builder with 6+ open-source Elixir projects, including Zeiroh (FLAME overlay for Iroh/Zenoh), IngotCluster (Iroh+Zenoh cluster), Crucible (multi-cloud provisioner), Gale (HTTP/3), Orian (S3/S5 transfer), and Dusk (Zenoh cluster). All MIT-licensed with CI and docs.
 ```
 
 ---
@@ -69,27 +68,35 @@ Solo builder with 6+ open-source Elixir projects, including Zeiroh (FLAME overla
 ## Milestones
 
 ### Milestone 1
-- **Title:** Stacks Node Discovery via Iroh DHT
-- **Amount:** $2,000 STX
-- **Duration:** Weeks 1–3
-- **Deliverables:** Iroh DHT namespace for Stacks nodes, CLI: `zeiroh stacks peers`, node identity from Stacks address
+- **Title:** Stacks Node Discovery + FLAME Overlay
+- **Amount:** $2,500 STX
+- **Duration:** Weeks 1–5
+- **Deliverables:** 
+  - Iroh DHT namespace for Stacks nodes (`stacks/node/1` ALPN)
+  - CLI: `zeiroh stacks peers`
+  - Node identity from Stacks address
+  - `Zeiroh.FLAME.Backend` with Stacks overlay config
+  - Distributed burnchain indexer example
+  - Signer node health watcher example
+  - Tests: mock Iroh DHT, FLAME worker lifecycle
 
-### Milestone 2
-- **Title:** FLAME Overlay for Stacks Off-Chain Services
-- **Amount:** $2,000 STX
-- **Duration:** Weeks 4–7
-- **Deliverables:** FLAME backend with Stacks overlay, distributed indexer example, relay monitor example
-
-### Milestone 3
+### Milestone 2 (Final)
 - **Title:** sBTC Relay Pub/Sub + Production Packaging
-- **Amount:** $2,000 STX
-- **Duration:** Weeks 8–10
-- **Deliverables:** Zenoh pub/sub for relay state, Burrito binary, benchmarks
+- **Amount:** $2,500 STX
+- **Duration:** Weeks 6–10
+- **Deliverables:**
+  - Zenoh pub/sub for sBTC relay state (`stacks/sbtc/relay/**`)
+  - sBTC relay health monitor example
+  - Relay status aggregation and conflict detection
+  - Burrito single-binary build
+  - Performance benchmarks: discovery latency, message throughput, failover time
+  - Security review of peer identity and message authentication
+  - Final adoption metric: 3+ operators reporting successful deployment within 30 days of v0.3.0
 
 ---
 
 ## Disbursement
 ```
-50% at Milestone 1 (Week 3)
-50% at Milestone 3 (Week 10)
+50% at Milestone 1 (Week 5)
+50% at Milestone 2 (Week 10)
 ```
