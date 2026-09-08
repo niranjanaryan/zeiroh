@@ -66,11 +66,15 @@ defmodule Zeiroh.MixProject do
   defp sibling(name) do
     path = Path.expand("../#{name}", __DIR__)
 
-    if System.get_env("HEX_PUBLISH") != "1" and File.dir?(path) do
+    if File.dir?(path) and not hex_publish?() do
       [{name, path: path, optional: true}]
     else
       []
     end
+  end
+
+  defp hex_publish? do
+    System.get_env("HEX_PUBLISH") == "1"
   end
 
   defp description do
