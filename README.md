@@ -72,4 +72,11 @@ config :flame, :backend, {Zeiroh.FLAME.Zenoh, connect: "tcp/127.0.0.1:7447"}
 Today `remote_boot` is in-process unless a Crucible/Fly/K8s provisioner
 is wired with `terminator_sup`. Overlay advertise still runs.
 
+## FUNDING
+
+If Zeiroh is useful to your project, consider sponsoring the project to support ongoing development.
+
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub-ea4aaa.svg)](https://github.com/sponsors/niranjanaryan)
+[![Buy Me a Coffee](https://img.shields.io/badge/buy%20me%20a%20coffee-FFDD00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/niranjanaryan)
+
 MIT.

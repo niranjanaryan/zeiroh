@@ -7,7 +7,9 @@ defmodule Zeiroh.CLI do
   zeiroh #{@version} — Phoenix FLAME overlay (Iroh / Zenoh)
 
     zeiroh backends
-    zeiroh flame [--overlay iroh|zenoh|both]
+    zeiroh flame [--overlay iroh|zenoh|both|stacks]
+    zeiroh stacks peers
+    zeiroh stacks relay-status
     zeiroh version
 
   Install: mix zeiroh.install
@@ -55,6 +57,7 @@ defmodule Zeiroh.CLI do
       case parsed[:overlay] || "both" do
         "iroh" -> :iroh
         "zenoh" -> :zenoh
+        "stacks" -> :stacks
         _ -> :both
       end
 
@@ -77,6 +80,21 @@ defmodule Zeiroh.CLI do
         err("flame timeout")
         {:error, :timeout}
     end
+  end
+
+  defp dispatch(["stacks", "peers" | _], _) do
+    peers = Zeiroh.Stacks.discover_peers()
+    info(inspect(peers, pretty: true))
+    :ok
+  end
+
+  defp dispatch(["stacks", "relay-status" | _], _) do
+    {:ok, session} = Zeiroh.Stacks.relay_status_subscriber()
+
+    info("Subscribed to stacks/sbtc/relay/status (Ctrl+C to exit)")
+
+    # Keep process alive and print messages
+    :timer.sleep(:infinity)
   end
 
   defp dispatch(_, _) do
